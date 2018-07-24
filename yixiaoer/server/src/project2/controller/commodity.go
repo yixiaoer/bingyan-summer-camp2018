@@ -9,7 +9,7 @@ import (
 
 func ShowCategory(c echo.Context) error {
 	CommodityCategory := map[string]string{
-		"类别": "",
+		"category": "",
 	}
 	c.Bind(&CommodityCategory)
 	fmt.Println(CommodityCategory)
@@ -22,12 +22,20 @@ func ShowCategory(c echo.Context) error {
 
 func ShowLocation(c echo.Context) error {
 	CommodityCategory := map[string]string{
-		"地域": "",
+		"location": "",
 	}
 	c.Bind(&CommodityCategory)
 	var commodity []model.Commodity
 	commodity = model.ShowLocation(CommodityCategory)
 	u := &commodity
+	return c.JSON(http.StatusOK, u)
+}
+
+func AllCommodities(c echo.Context) error {
+
+	var commodities []model.Commodity
+	commodities = model.AllCommodities()
+	u := &commodities
 	return c.JSON(http.StatusOK, u)
 }
 
@@ -45,17 +53,11 @@ func CommodityInfo(c echo.Context) error {
 	return c.JSON(http.StatusOK, u)
 }
 
-func PopluarRank(c echo.Context) error{
-	userInfo := map[string]string{
-		"hits":  "yes",
-	}
-	c.Bind(&userInfo)
+func PopluarityRank(c echo.Context) error {
 
 	var commodity []model.Commodity
 
-	commodity=model.PopularRank(userInfo)
+	commodity = model.PopularRank()
 	u := &commodity
 	return c.JSON(http.StatusOK, u)
 }
-
-

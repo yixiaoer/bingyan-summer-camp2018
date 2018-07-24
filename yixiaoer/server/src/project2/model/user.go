@@ -103,7 +103,7 @@ func SignUp(u map[string]string) int8 {
 	return i
 }
 
-func UserInfo(u map[string]string)User{
+func UserInfo(u map[string]string) User {
 	session, err := mgo.Dial("localhost:27017")
 	if err != nil {
 		panic(err)
@@ -114,11 +114,11 @@ func UserInfo(u map[string]string)User{
 	c := session.DB("商城").C("用户")
 
 	var user User
-	c.Find(bson.M{"name": u["name"]}).One(&user)
+	c.Find(bson.M{"name": u["username"]}).One(&user)
 	return user
 }
 
-func UserHits(u map[string]string){
+func UserHits(u map[string]string) {
 	session, err := mgo.Dial("localhost:27017")
 	if err != nil {
 		panic(err)

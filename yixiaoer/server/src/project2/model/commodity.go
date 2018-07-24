@@ -28,7 +28,7 @@ func ShowCategory(u map[string]string) []Commodity {
 
 	c := session.DB("商城").C("商品")
 
-	var commodities []Commodity//用切片来存放所有查询结果
+	var commodities []Commodity //用切片来存放所有查询结果
 	err = c.Find(bson.M{"category": u["category"]}).All(&commodities)
 	fmt.Println("test")
 	fmt.Println(err)
@@ -76,22 +76,39 @@ func CommodityInfo(u map[string]string) Commodity {
 	return commodity
 }
 
-//热度查看
-func PopularRank(u map[string]string) []Commodity {
-	var commodities []Commodity
-	if u["hits"] == "yes" {
-		session, err := mgo.Dial("localhost:27017")
-		if err != nil {
-			panic(err)
-		}
-		defer session.Close()
+func AllCommodities() []Commodity {
+	var commodities []Commodity //用切片来存放所有查询结果
 
-		// Optional. Switch the session to a monotonic behavior.
-		session.SetMode(mgo.Monotonic, true)
-		c := session.DB("商城").C("商品")
-
-		c.Find(nil).Sort("-hits").All(&commodities) // 按照点击量升序排列
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		panic(err)
 	}
+	defer session.Close()
+
+	// Optional. Switch the session to a monotonic behavior.
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("商城").C("商品")
+
+	c.Find(bson.M{}).All(&commodities)
+	return commodities
+}
+
+//热度查看
+func PopularRank() []Commodity {
+	var commodities []Commodity
+
+	session, err := mgo.Dial("localhost:27017")
+	if err != nil {
+		panic(err)
+	}
+	defer session.Close()
+
+	// Optional. Switch the session to a monotonic behavior.
+	session.SetMode(mgo.Monotonic, true)
+	c := session.DB("商城").C("商品")
+
+	c.Find(nil).Sort("-hits").All(&commodities) // 按照点击量升序排列
+
 	return commodities
 }
 
